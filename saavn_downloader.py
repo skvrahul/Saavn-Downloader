@@ -49,7 +49,8 @@ class SaavnDownloader:
             song_dict['album'] = obj['album']
             song_dict['artists'] = obj['singers']
             song_dict['year'] = obj['year']
-            song_dict['title'] = obj['album']            
+            song_dict['title'] = obj['title']
+            song_dict['thumbnail'] = obj['image_url']       
             enc_url = base64.b64decode(obj['url'].strip())
             dec_url = des_cipher.decrypt(enc_url,padmode=PAD_PKCS5).decode('utf-8')
             dec_url = base_url + dec_url.replace('mp3:audios','') + '.mp3'
