@@ -14,12 +14,21 @@ def download_album_art(url,filename):
         urllib.request.urlretrieve(url, filename+'.jpg')
     else:
         print('Cover art already exists')
-def song_select(songs):
-    n = len(songs)
-    for i,song in enumerate(songs):
-        print('{}) {} - {}'.format(i, song['title'], song['artists']))
+def song_select(song_links):
+    # n = len(songs)
+    # for i,song in enumerate(songs):
+    #     print('{}) {} - {}'.format(i, song['title'], song['artists']))
+    # sel = input('Enter the number of the song you want to download(0 to '+str(n)+')')
+    # return int(sel)
+    n = len(song_links)    
+    for i, link in enumerate(song_links):
+        title = '????'
+        if link.has_attr('title'):
+            title = link.contents[0]
+        print('{}) {}'.format(i, title))
     sel = input('Enter the number of the song you want to download(0 to '+str(n)+')')
     return int(sel)
+    
 def download(url, filename, song):
     if not os.path.exists(filename+'.mp3'):    
         print('Downloading '+song['title']+'-'+song['artists'])
@@ -50,19 +59,17 @@ def get_song():
     soup = bs4.BeautifulSoup(req.text,"lxml")
     links = soup.find_all("a")
     song_link = None
+    song_links = []
     for link in links:
         if link.has_attr('href')and ('s/song/' in link['href']):
-            print(link['href'])
-            song_link = link['href']
-            break
-    if song_link is None:
-        print("Error finding song. Exiting...")
-        sys.exit(0)
+            song_links.append(link)
+
+    #Selecting a song from the results    
+    song_link = song_links[song_select(song_links)]['href']
+    print('Downloading from:'+song_link)
     downloader = SaavnDownloader(song_link)
     songs = downloader.get_songs()
-    #Selecting a song from the results
-    i = song_select(songs)
-    song = songs[i]
+    song = songs[0]
     #Removing '/' from file name and album and downloading the file
     download(song['url'],base_path+'/'+(song['title']+'-'+song['album']).replace('/', '') , song)
 def get_album():
