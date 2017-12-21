@@ -55,8 +55,8 @@ def get_song():
     url = base_url + query
 
     #Scraping Saavn for first result
-    req = requests.get(url, headers = headers)
-    soup = bs4.BeautifulSoup(req.text,"lxml")
+    req = requests.get(url, headers=headers)
+    soup = bs4.BeautifulSoup(req.text, "lxml")
     links = soup.find_all("a")
     song_link = None
     song_links = []
@@ -71,7 +71,7 @@ def get_song():
     songs = downloader.get_songs()
     song = songs[0]
     #Removing '/' from file name and album and downloading the file
-    download(song['url'],base_path+'/'+(song['title']+'-'+song['album']).replace('/', '') , song)
+    download(song['url'], base_path+'/'+(song['title']).replace('/', '') , song)
 def get_album():
     base_path = './songs'
     album_link = input('Please enter Album URL-\n')
@@ -85,7 +85,7 @@ def get_album():
     songs = downloader.get_songs()
     for song in songs:
         #Removing '/' from file name and album and downloading the file
-        download(song['url'],base_path+'/'+(song['title']+'-'+song['album']).replace('/', '') ,song)
+        download(song['url'],base_path+'/'+(song['title']).replace('/', '') ,song)
 def main():
     choice = input('Do you want to download a song - s or an album/playlist - a\n')
     if choice.upper() == 'A' or choice.upper()=='P':
